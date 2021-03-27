@@ -1,37 +1,31 @@
 class Solution {
     public int numFactoredBinaryTrees(int[] arr) {
-         int n = arr.length;
-        if(n == 1){
-            return 1;
+        
+        if(arr == null || arr.length == 0) {
+            return 0;
         }
+        
         Arrays.sort(arr);
+        HashMap<Integer, Long> map = new HashMap<>();
         
-        long[] dp = new long[n];
-        Arrays.fill(dp, 1);
         
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for(int i = 0; i < n; i++){
-            map.put(arr[i], i);
-        }
         
-        long ans = 0;
-        int remaining = 0;
-        
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < i; j++){
-                if(arr[i] % arr[j] == 0){
-                    remaining = arr[i] / arr[j];
-                    if(map.containsKey(remaining)){
-                        dp[i] += dp[j] * dp[map.get(remaining)];
-                    }
+        for(int i=0; i<arr.length; i++) {
+            long count = 1l;
+            for(int j=0; j<i; j++) {
+                if(arr[i] % arr[j] == 0 && map.containsKey(arr[i]/arr[j])) {
+                    count += map.get(arr[j]) * map.get(arr[i]/arr[j]);
                 }
             }
+            map.put(arr[i], count);
         }
         
-        for(long v : dp){
-            ans += v;
-        }
-        return (int) (ans % 1_000_000_007);
+        long totalCount = 0l;
         
+        for(Map.Entry<Integer, Long> entry : map.entrySet()) {
+            totalCount += entry.getValue();
+        }
+        
+        return (int)(totalCount % (1000000000 + 7));
     }
 }
