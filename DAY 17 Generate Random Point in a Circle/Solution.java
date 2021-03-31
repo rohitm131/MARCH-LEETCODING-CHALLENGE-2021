@@ -1,23 +1,41 @@
 class Solution {
 
-    double RAD, XC, YC;
-    
+    double a;
+    double b;
+    double r;
+
+    Random rand = null;
+
     public Solution(double radius, double x_center, double y_center) {
-        
-         RAD = radius;
-        XC = x_center;
-        YC = y_center;
-        
+        this.a= x_center;
+        this.b= y_center;
+        this.r = radius;
+        rand = new Random();
+
     }
-    
+
     public double[] randPoint() {
-        
-        double ang = Math.random() * 2 * Math.PI,
-            hyp = Math.sqrt(Math.random()) * RAD,
-            adj = Math.cos(ang) * hyp,
-            opp = Math.sin(ang) * hyp;
-        return new double[]{XC + adj, YC + opp};
-        
+
+        double x = getRandomCoordinate(r, a);
+
+        double y = getRandomCoordinate(r, b);
+
+        while(getDistance(x,y) >= r*r){
+            x = getRandomCoordinate(r, a);
+            y = getRandomCoordinate(r, b);
+        }
+
+        return new double[]{x,y};
+
+    }
+
+    private double getDistance(double x, double y){
+        return (x-a)*(x-a) + (y-b)*(y-b);
+    }
+
+    private double getRandomCoordinate(double r, double c){
+        return c - r + Math.random()*(2*r);
+        // a -r + radom(2r);
     }
 }
 
